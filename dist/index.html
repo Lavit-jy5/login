@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>国泰基金登录流程重构｜交互原型</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="stage">
+    <aside class="brief">
+      <div class="eyebrow">GUOTAI FUND · INTERACTIVE PROTOTYPE</div>
+      <h1>登录流程重构<br>高保真交互原型</h1>
+      <p>围绕首次下载、游客浏览、实名开户、第三方持仓关联四个关键场景，演示两条入口如何汇入同一套安全核验流程。</p>
+      <div class="case-label">三类登录场景</div>
+      <div class="scenario-list case-list" id="scenarioList">
+        <button data-go="login" data-case="newOneTap" class="active"><span>A</span><b>新用户登录注册 · 可一键登录</b><small>本机号码识别 → 提示一键注册</small></button>
+        <button data-go="rememberedLogin" data-case="newSms"><span>B</span><b>新用户注册登录 · 不可一键登录</b><small>记住手机号 → 短信验证 → 注册</small></button>
+        <button data-go="login" data-case="old"><span>C</span><b>老用户登录</b><small>本机号码一键验证，亦可账号密码登录</small></button>
+      </div>
+      <details class="node-nav"><summary>查看后续关键节点</summary><div class="scenario-list">
+        <button data-go="registerSuccess"><span>01</span><b>注册成功</b><small>实名认证强引导</small></button>
+        <button data-go="homeGuest"><span>02</span><b>游客首页</b><small>先浏览，实名后置</small></button>
+        <button data-go="assetsGuest"><span>03</span><b>游客资产页</b><small>不展示未核验资产</small></button>
+        <button data-go="verify"><span>04</span><b>关联并开户</b><small>实名、绑卡、关联一体化</small></button>
+        <button data-go="assetsDone"><span>05</span><b>完成状态</b><small>第三方持仓可查询</small></button>
+      </div></details>
+      <div class="legend"><i></i> 页面内按钮均可点击演示 <kbd>R</kbd> 重置</div>
+    </aside>
+
+    <section class="device-wrap">
+      <div class="device">
+        <div class="dynamic-island"></div>
+        <div class="statusbar"><span>9:41</span><span>▮▮▮  Wi‑Fi  ▰</span></div>
+        <div id="app" class="app"></div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="caption"><span id="stepBadge">01</span><div><b id="stepTitle">首次登录</b><small id="stepHint">点击页面内按钮继续演示</small></div></div>
+    </section>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>
