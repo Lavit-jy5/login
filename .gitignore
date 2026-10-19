@@ -1,9 +1,0 @@
-# macOS metadata
-.DS_Store
-
-# Local export archives and visual review snapshots; not needed to run the site
-site-package*.tar.gz
-*.png
-
-# Keep only the application assets used by the deployed static site
-!dist/assets/*.png
