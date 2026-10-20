@@ -11,12 +11,15 @@
     <aside class="brief">
       <div class="eyebrow">GUOTAI FUND · INTERACTIVE PROTOTYPE</div>
       <h1>登录流程重构<br>高保真交互原型</h1>
-      <p>围绕首次下载、游客浏览、实名开户、第三方持仓关联四个关键场景，演示两条入口如何汇入同一套安全核验流程。</p>
-      <div class="case-label">三类登录场景</div>
+      <p>按账户状态拆分登录与开户路径，演示各类用户在一键登录可用或不可用时，如何进入注册、实名开户或直接登录。</p>
+      <div class="case-label">账户状态与登录可用性</div>
       <div class="scenario-list case-list" id="scenarioList">
-        <button data-go="login" data-case="newOneTap" class="active"><span>A</span><b>新用户登录注册 · 可一键登录</b><small>本机号码识别 → 提示一键注册</small></button>
-        <button data-go="rememberedLogin" data-case="newSms"><span>B</span><b>新用户注册登录 · 不可一键登录</b><small>记住手机号 → 短信验证 → 注册</small></button>
-        <button data-go="login" data-case="old"><span>C</span><b>老用户登录</b><small>本机号码一键验证，亦可账号密码登录</small></button>
+        <button data-go="login" data-case="unregisteredOneTap" class="active"><span>A1</span><b>未注册新用户 · 可一键登录</b><small>本机号码验证 → 自动注册并登录</small></button>
+        <button data-go="rememberedLogin" data-case="unregisteredSms"><span>A2</span><b>未注册新用户 · 不可一键登录</b><small>记住手机号 → 短信验证 → 自动注册</small></button>
+        <button data-go="login" data-case="unopenedOneTap"><span>B1</span><b>已注册未开户 · 可一键登录</b><small>本机号码验证 → 直接登录 → 首页提示开户</small></button>
+        <button data-go="rememberedLogin" data-case="unopenedSms"><span>B2</span><b>已注册未开户 · 不可一键登录</b><small>记住手机号 → 短信验证 → 首页提示开户</small></button>
+        <button data-go="login" data-case="openedOneTap"><span>C1</span><b>已实名开户 · 可一键登录</b><small>本机号码验证 → 直接进入首页</small></button>
+        <button data-go="rememberedLogin" data-case="openedSms"><span>C2</span><b>已实名开户 · 不可一键登录</b><small>记住手机号 → 短信验证 → 直接进入首页</small></button>
       </div>
       <details class="node-nav"><summary>查看后续关键节点</summary><div class="scenario-list">
         <button data-go="registerSuccess"><span>01</span><b>注册成功</b><small>实名认证强引导</small></button>
@@ -39,5 +42,6 @@
     </section>
   </main>
   <script src="./app.js"></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 </body>
 </html>
