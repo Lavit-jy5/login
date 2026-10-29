@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>国泰基金｜登录与开户数据看板</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">GT</div>
+        <div><strong>国泰基金</strong><span>数据洞察中心</span></div>
+      </div>
+      <nav class="nav-list" aria-label="看板导航">
+        <button class="nav-item active" data-page="overview"><span class="nav-icon">⌂</span><span>经营总览</span></button>
+        <button class="nav-item" data-page="login"><span class="nav-icon">↗</span><span>登录与注册</span><em class="ready">已完成</em></button>
+        <button class="nav-item" data-page="opening"><span class="nav-icon">◇</span><span>开户转化</span><em class="ready">已完成</em></button>
+      </nav>
+      <div class="sidebar-note"><span></span><div><b>数据状态正常</b><small>最近更新 09:32</small></div></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">LOGIN & ACCOUNT OPENING</p>
+          <h1 id="pageTitle">核心经营总览</h1>
+          <p class="subtitle" id="pageSubtitle">核心指标与趋势</p>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" title="刷新数据" id="refreshBtn">↻</button>
+        </div>
+      </header>
+
+      <section class="filter-bar" aria-label="全局筛选">
+        <label>日期范围<select id="rangeSelect"><option value="7">最近7天</option><option value="30">最近30天</option><option value="1">昨日</option></select></label>
+        <label>App版本<select id="versionSelect"><option>全部版本</option><option>8.12.0</option><option>8.11.2</option></select></label>
+        <label>操作系统<select id="osSelect"><option>全部系统</option><option>iOS</option><option>Android</option></select></label>
+        <label>用户类型<select id="userTypeSelect"><option>全部用户</option><option>新用户</option><option>已开户用户</option><option>已注册未实名</option></select></label>
+        <label class="opening-only-filter">开户路径<select id="pathSelect"><option>全部路径</option><option>注册后开户</option><option>未开户用户补开户</option><option>首次激活开户</option></select></label>
+        <button class="reset-btn" id="resetBtn">重置筛选</button>
+        <div class="live-data-badge"><i></i><span>交互演示数据</span></div>
+        <div class="date-chip"><span id="activeFilterText">全部用户</span> · 数据截止：2026-10-28 09:30</div>
+      </section>
+      <section class="scenario-bar" aria-label="快捷演示场景"><span>快捷演示</span><button class="active" data-scenario="default">整体基线</button><button data-scenario="ios">iOS高转化</button><button data-scenario="android">Android旧版本</button><button data-scenario="yesterday">昨日波动</button><small>切换后全部图表同步更新</small></section>
+
+      <div class="page-view active" id="overviewPage">
+
+      <section class="section-heading">
+        <div><h2>关键业务指标</h2><p id="comparisonText">本周期：最近7天；对比周期：此前连续7天</p></div>
+        <button class="quiet-btn">指标口径说明 <span>→</span></button>
+      </section>
+
+      <section class="metric-grid" id="metricGrid"></section>
+
+      <section class="dashboard-grid overview-trend-grid">
+        <article class="panel trend-panel">
+          <div class="panel-head">
+            <div><h3>核心结果趋势</h3><p>登录完成、注册与开户规模变化</p></div>
+            <div class="segmented" id="trendTabs">
+              <button class="active" data-mode="count">人数</button>
+              <button data-mode="rate">转化率</button>
+            </div>
+          </div>
+          <div class="legend" id="trendLegend"></div>
+          <div class="chart-wrap"><svg id="trendChart" role="img" aria-label="核心结果趋势图"></svg><div class="tooltip" id="trendTooltip"></div></div>
+        </article>
+
+      </section>
+
+      <section class="dashboard-grid secondary-grid">
+        <article class="panel structure-panel">
+          <div class="panel-head"><div><h3>登录用户结构</h3><p id="userStructureSubtitle">按账户识别结果划分 · 截至10/28 24:00</p></div><button class="more-btn">···</button></div>
+          <div class="structure-content">
+            <div class="donut" id="userDonut"><div><strong>18,642</strong><span>识别用户</span></div></div>
+            <div class="structure-list" id="structureList"></div>
+          </div>
+        </article>
+
+        <article class="panel path-panel">
+          <div class="panel-head"><div><h3>有效开户路径贡献</h3></div><button class="quiet-btn mini">查看详情 →</button></div>
+          <div class="path-chart" id="pathChart"></div>
+          <div class="path-foot"><span>● 条形长度代表有效开户人数</span><span>完成率按进入开户人数计算</span></div>
+        </article>
+      </section>
+
+      </div>
+
+      <div class="page-view" id="loginPage">
+        <section class="mini-kpi-grid">
+          <article><span>登录首页到达人数</span><strong>18,642</strong><small>统计起点 · 去重用户</small></article>
+          <article><span>发起登录人数</span><strong>17,506</strong><small class="good-text">发起率 93.9%</small></article>
+          <article><span>登录完成人数</span><strong>16,842</strong><small class="good-text">平台完成率 96.2%</small></article>
+          <article><span>新增注册用户</span><strong>2,316</strong><small>完整注册率 76.8%</small></article>
+        </section>
+
+        <section class="panel funnel-panel">
+          <div class="panel-head"><div><h3>平台登录总漏斗</h3><p>同一用户在统计周期内按最深到达步骤去重；点击节点查看口径</p></div><span class="formula-chip">平台完成率=完成÷发起；首页到完成率=完成÷首页到达</span></div>
+          <div class="funnel-flow" id="loginFunnel">
+            <button class="funnel-step" data-title="登录首页到达" data-detail="进入登录首页的去重用户数，是平台登录完成率的分母。"><span>01</span><b>登录首页到达</b><strong>18,642</strong><small>起点 100%</small></button>
+            <i>−1,136<br><em>未发起</em></i>
+            <button class="funnel-step" data-title="发起登录" data-detail="至少提交过一种登录方式的去重用户数；发起率为 17,506 ÷ 18,642 = 93.9%。"><span>02</span><b>发起登录</b><strong>17,506</strong><small>发起率 93.9%</small></button>
+            <i>−664<br><em>登录未完成</em></i>
+            <button class="funnel-step success" data-title="登录完成" data-detail="服务端返回成功且客户端建立有效登录态。平台完成率为16,842÷17,506=96.2%；登录首页到完成率为90.3%。"><span>03</span><b>登录完成</b><strong>16,842</strong><small>发起到完成 96.2%</small></button>
+          </div>
+        </section>
+
+        <section class="login-layout">
+          <article class="panel method-panel">
+            <div class="panel-head"><div><h3>登录方式对比</h3><p>点击方式查看对应漏斗</p></div><span class="status-pill good">按发起用户去重</span></div>
+            <div class="compare-head"><span>登录方式</span><span>发起人数</span><span>使用占比</span><span>最终完成率</span></div>
+            <div id="methodRows">
+              <button class="method-row active" data-method="sms"><span><i class="method-icon sms">短</i><b>短信登录</b></span><strong>7,500</strong><span>42.8%</span><span>96.9%</span></button>
+              <button class="method-row" data-method="one"><span><i class="method-icon one">一</i><b>一键登录</b></span><strong>6,100</strong><span>34.8%</span><span>97.9%</span></button>
+              <button class="method-row" data-method="password"><span><i class="method-icon pwd">密</i><b>账户密码</b></span><strong>1,760</strong><span>10.1%</span><em>88.7%</em></button>
+              <button class="method-row" data-method="biometric"><span><i class="method-icon bio">脸</i><b>生物识别</b></span><strong>2,146</strong><span>12.3%</span><span>95.1%</span></button>
+            </div>
+          </article>
+
+          <article class="panel diagnosis-panel">
+            <div class="panel-head"><div><h3 id="diagnosisTitle">短信登录漏斗</h3><p id="diagnosisSub">观察验证码获取、提交与校验流失</p></div><span class="status-pill" id="diagnosisStatus">完成率 95.8%</span></div>
+            <div class="compact-funnel" id="diagnosisFunnel"></div>
+          </article>
+        </section>
+
+        <section class="dashboard-grid registration-grid">
+          <article class="panel">
+            <div class="panel-head"><div><h3>新用户注册漏斗</h3><p>仅统计经登录链路识别出的新用户</p></div><span class="formula-chip">完整注册率 = 建立登录态 ÷ 识别新用户</span></div>
+            <div class="registration-funnel">
+              <div><span>识别新用户</span><b>3,016</b><small>上步 100% · 起点 100%</small></div>
+              <div><span>发起注册</span><b>2,684</b><small>上步 89.0% · 起点 89.0% · 流失 332</small></div>
+              <div><span>注册成功</span><b>2,401</b><small>上步 89.5% · 起点 79.6% · 流失 283</small></div>
+              <div><span>建立登录态</span><b>2,316</b><small>上步 96.5% · 起点 76.8% · 流失 85</small></div>
+            </div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><h3>注册来源质量</h3><p>比较不同登录来源的新用户完整注册率</p></div><button class="quiet-btn" data-action="export">导出数据 ↓</button></div>
+            <div class="source-bars">
+              <div><span>一键登录来源</span><i><b style="width:82.4%"></b></i><strong>82.4%</strong><small>1,084 人</small></div>
+              <div><span>手机验证码来源</span><i><b style="width:74.9%"></b></i><strong>74.9%</strong><small>1,012 人</small></div>
+              <div><span>账户密码来源</span><i><b style="width:68.6%"></b></i><strong>68.6%</strong><small>220 人</small></div>
+            </div>
+          </article>
+        </section>
+      </div>
+
+      <div class="page-view" id="openingPage">
+        <section class="mini-kpi-grid opening-kpis">
+          <article><span>进入开户人数</span><strong>2,439</strong><small>三类有效开户路径去重</small></article>
+          <article><span>有效开户用户数</span><strong>1,481</strong><small class="good-text">较上周期 +8.2%</small></article>
+          <article><span>开户整体完成率</span><strong>60.7%</strong><small>1,481 ÷ 2,439</small></article>
+          <article><span>新用户当天开户率</span><strong>35.1%</strong><small>812 ÷ 2,316</small></article>
+          <article><span>人脸核验成功率</span><strong>86.4%</strong><small class="warning-text">低于步骤均值 5.2pp</small></article>
+        </section>
+
+        <section class="panel supplement-entry-panel">
+          <div class="panel-head"><div><h3>已注册未实名补开户入口</h3></div><span class="formula-chip">合计进入 797 人 · 有效开户 421 人</span></div>
+          <div class="source-entry-grid" id="supplementSources">
+            <button class="source-entry active" data-source="unverified_home"><span>未实名首页</span><strong>312</strong><i><b style="width:55.8%"></b></i><em>完成率 55.8%</em><small>开户贡献 41.3%</small></button>
+            <button class="source-entry" data-source="asset"><span>资产页</span><strong>178</strong><i><b style="width:52.8%"></b></i><em>完成率 52.8%</em><small>开户贡献 22.3%</small></button>
+            <button class="source-entry" data-source="buy"><span>买入拦截</span><strong>142</strong><i><b style="width:50.7%"></b></i><em>完成率 50.7%</em><small>开户贡献 17.1%</small></button>
+            <button class="source-entry" data-source="invest"><span>定投拦截</span><strong>98</strong><i><b style="width:48%"></b></i><em>完成率 48.0%</em><small>开户贡献 11.2%</small></button>
+            <button class="source-entry" data-source="password"><span>密码登录拦截</span><strong>67</strong><i><b style="width:50.7%"></b></i><em>完成率 50.7%</em><small>开户贡献 8.1%</small></button>
+          </div>
+          <div class="source-detail" id="sourceDetail"><b>未实名首页</b><span>进入312人 · 有效开户174人 · 完成率55.8%</span></div>
+        </section>
+
+        <section class="panel path-entry-panel">
+          <div class="panel-head"><div><h3>开户人群路径</h3></div><span class="formula-chip">路径完成率 = 开户成功人数 ÷ 进入人数</span></div>
+          <div class="entry-cards">
+            <button class="entry-card active" data-opening-path="register"><span>注册成功后继续开户</span><strong>1,101 人</strong><div><i><b style="width:61.2%"></b></i><em>61.2%</em></div><small>有效开户 674 人</small></button>
+            <button class="entry-card" data-opening-path="supplement"><span>已注册未实名补开户</span><strong>797 人</strong><div><i><b style="width:52.8%"></b></i><em>52.8%</em></div><small>有效开户 421 人</small></button>
+            <button class="entry-card" data-opening-path="activation"><span>账户首次激活开户</span><strong>541 人</strong><div><i><b style="width:71.3%"></b></i><em>71.3%</em></div><small>有效开户 386 人</small></button>
+          </div>
+        </section>
+
+        <section class="panel opening-funnel-panel">
+          <div class="panel-head"><div><h3 id="openingFunnelTitle">注册成功后继续开户漏斗</h3><p>点击步骤查看口径</p></div><span class="status-pill good" id="openingFunnelRate">路径完成率 61.2%</span></div>
+          <div class="step-funnel" id="openingFunnel"></div>
+        </section>
+
+        <section class="dashboard-grid opening-bottom-grid">
+          <article class="panel"><div class="panel-head"><div><h3>关键步骤间转化率</h3><p>下一步骤成功人数 ÷ 上一步骤成功人数</p></div></div><div class="step-rate-bars"><div><span>身份信息提交</span><i><b style="width:96.2%"></b></i><strong>96.2%</strong></div><div><span>银行卡绑定</span><i><b style="width:91.8%"></b></i><strong>91.8%</strong></div><div><span>交易密码设置</span><i><b style="width:94.1%"></b></i><strong>94.1%</strong></div><div class="danger"><span>人脸核验</span><i><b style="width:86.4%"></b></i><strong>86.4%</strong></div><div class="danger"><span>开户结果成功</span><i><b style="width:85.2%"></b></i><strong>85.2%</strong></div></div></article>
+          <article class="panel"><div class="panel-head"><div><h3>开户失败原因</h3><p>按失败用户的最后一次明确结果归因</p></div><select class="reason-select" id="openingReasonDimension"><option value="all">全部用户</option><option value="ios">iOS</option><option value="android">Android</option><option value="old">8.11.2</option><option value="buy">买入入口</option><option value="asset">资产页入口</option></select></div><div class="failure-list" id="openingFailureList"></div></article>
+        </section>
+      </div>
+
+      <div class="page-view" id="activationPage">
+        <section class="activation-grid">
+          <article class="panel activation-segment"><div class="panel-head"><div><h3>首次激活人群识别</h3></div><span class="formula-chip">有效激活率 = 激活成功用户 ÷ 识别为未实名用户</span></div><div class="activation-tree"><div class="tree-root"><span>点击首次激活</span><b>1,126 人</b></div><div class="tree-branch"><article class="valid"><span>识别为未实名</span><b>541 人 · 48.0%</b><small>进入开户</small></article><article class="invalid"><span>已实名误入</span><b>512 人 · 45.5%</b><small>不计入分母</small></article><article><span>识别失败 / 退出</span><b>73 人 · 6.5%</b><small>单独统计</small></article></div></div><div class="activation-result"><span>开户并登录成功</span><strong>386 人</strong><em>有效激活率 71.3%</em></div></article>
+          <article class="panel"><div class="panel-head"><div><h3>有效激活流程表现</h3></div><button class="quiet-btn" id="goOpeningBtn">查看开户步骤 →</button></div><div class="activation-summary"><div><span>进入开户</span><b>541</b><small>100%</small></div><div><span>交易密码成功</span><b>431</b><small>79.7%</small></div><div><span>人脸核验成功</span><b>391</b><small>72.3%</small></div><div><span>开户成功</span><b>386</b><small>71.3%</small></div><div><span>建立登录态</span><b>386</b><small>71.3%</small></div></div></article>
+        </section>
+
+        <section class="panel biometric-panel">
+          <div class="panel-head"><div><h3>生物识别开通与登录</h3></div><span class="formula-chip">立即开启率 = 立即开启人数 ÷ 请求到达人数</span></div>
+          <div class="biometric-kpis"><article><span>请求到达用户</span><strong>3,842</strong><small>首次登录后成功展示请求</small></article><article><span>立即开启</span><strong>1,426</strong><small class="good-text">立即开启率 37.1%</small></article><article><span>下次再说</span><strong>1,038</strong><small>选择率 27.0%</small></article><article><span>15天不再提示</span><strong>822</strong><small>选择率 21.4%</small></article><article><span>直接取消</span><strong>556</strong><small>取消率 14.5%</small></article></div>
+          <div class="biometric-flow"><div class="bio-donut"><div><strong>37.1%</strong><span>立即开启率<br>10/22–10/28</span></div></div><div class="bio-legend"><div><i class="now"></i><span>立即开启</span><b>1,426</b><em>37.1%</em></div><div><i class="later"></i><span>下次再说</span><b>1,038</b><em>27.0%</em></div><div><i class="snooze"></i><span>15天不再提示</span><b>822</b><em>21.4%</em></div><div><i class="cancel"></i><span>直接取消</span><b>556</b><em>14.5%</em></div></div></div>
+          <div class="bio-login-strip"><article><span>已开通且可用用户</span><strong>4,386</strong><small id="bioStateDate">截至10/28 24:00</small></article><article><span>生物识别登录使用率</span><strong>48.9%</strong></article><article><span>登录完成率</span><strong>95.1%</strong></article></div>
+        </section>
+
+        <section class="dashboard-grid biometric-bottom"><article class="panel"><div class="panel-head"><div><h3>不同系统立即开启率</h3><p>比较所选周期内不同系统的首次引导承接情况</p></div></div><div class="os-compare"><div><span>iOS · Face ID / Touch ID</span><i><b style="width:54.2%"></b></i><strong>54.2%</strong></div><div><span>Android · 指纹 / 面容</span><i><b style="width:44.1%"></b></i><strong>44.1%</strong></div></div></article></section>
+      </div>
+
+      <footer>原型数据仅用于展示 · 指标口径以《登录与开户核心数据埋点》为准</footer>
+    </main>
+  </div>
+  <div class="drawer-mask" id="drawerMask"></div>
+  <aside class="detail-drawer" id="detailDrawer" aria-hidden="true"><button class="drawer-close" id="drawerClose">×</button><span class="section-tag">指标口径</span><h3 id="drawerTitle"></h3><p id="drawerDetail"></p><div class="drawer-rule"><b>统计规则</b><span>按 user_id 去重；未登录用户使用 device_id，登录后完成身份合并。</span></div></aside>
+  <script src="app.js"></script>
+</body>
+</html>
