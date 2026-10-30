@@ -38,7 +38,6 @@
         <label>App版本<select id="versionSelect"><option>全部版本</option><option>8.12.0</option><option>8.11.2</option></select></label>
         <label>操作系统<select id="osSelect"><option>全部系统</option><option>iOS</option><option>Android</option></select></label>
         <label>用户类型<select id="userTypeSelect"><option>全部用户</option><option>新用户</option><option>已开户用户</option><option>已注册未实名</option></select></label>
-        <label class="opening-only-filter">开户路径<select id="pathSelect"><option>全部路径</option><option>注册后开户</option><option>未开户用户补开户</option><option>首次激活开户</option></select></label>
         <button class="reset-btn" id="resetBtn">重置筛选</button>
         <div class="live-data-badge"><i></i><span>交互演示数据</span></div>
         <div class="date-chip"><span id="activeFilterText">全部用户</span> · 数据截止：2026-10-28 09:30</div>
@@ -114,7 +113,8 @@
               <button class="method-row active" data-method="sms"><span><i class="method-icon sms">短</i><b>短信登录</b></span><strong>7,500</strong><span>42.8%</span><span>96.9%</span></button>
               <button class="method-row" data-method="one"><span><i class="method-icon one">一</i><b>一键登录</b></span><strong>6,100</strong><span>34.8%</span><span>97.9%</span></button>
               <button class="method-row" data-method="password"><span><i class="method-icon pwd">密</i><b>账户密码</b></span><strong>1,760</strong><span>10.1%</span><em>88.7%</em></button>
-              <button class="method-row" data-method="biometric"><span><i class="method-icon bio">脸</i><b>生物识别</b></span><strong>2,146</strong><span>12.3%</span><span>95.1%</span></button>
+              <button class="method-row" data-method="face"><span><i class="method-icon bio">脸</i><b>面容／指纹</b></span><strong>1,450</strong><span>8.3%</span><span>91.6%</span></button>
+              <button class="method-row" data-method="gesture"><span><i class="method-icon gesture">势</i><b>手势密码</b></span><strong>696</strong><span>4.0%</span><span>93.8%</span></button>
             </div>
           </article>
 
@@ -182,24 +182,20 @@
 
         <section class="dashboard-grid opening-bottom-grid">
           <article class="panel"><div class="panel-head"><div><h3>关键步骤间转化率</h3><p>下一步骤成功人数 ÷ 上一步骤成功人数</p></div></div><div class="step-rate-bars"><div><span>身份信息提交</span><i><b style="width:96.2%"></b></i><strong>96.2%</strong></div><div><span>银行卡绑定</span><i><b style="width:91.8%"></b></i><strong>91.8%</strong></div><div><span>交易密码设置</span><i><b style="width:94.1%"></b></i><strong>94.1%</strong></div><div class="danger"><span>人脸核验</span><i><b style="width:86.4%"></b></i><strong>86.4%</strong></div><div class="danger"><span>开户结果成功</span><i><b style="width:85.2%"></b></i><strong>85.2%</strong></div></div></article>
-          <article class="panel"><div class="panel-head"><div><h3>开户失败原因</h3><p>按失败用户的最后一次明确结果归因</p></div><select class="reason-select" id="openingReasonDimension"><option value="all">全部用户</option><option value="ios">iOS</option><option value="android">Android</option><option value="old">8.11.2</option><option value="buy">买入入口</option><option value="asset">资产页入口</option></select></div><div class="failure-list" id="openingFailureList"></div></article>
+          <article class="panel support-panel"><div class="panel-head"><div><h3>开户客服入口表现</h3><p>不统计曝光，以各步骤到达人数作为点击率分母</p></div><span class="formula-chip">客服点击率 = 点击人数 ÷ 对应步骤到达人数</span></div><div class="support-summary"><div><span>客服点击人数</span><strong>186</strong><small>去重用户</small></div><div><span>整体点击率</span><strong>7.6%</strong><small>186 ÷ 2,439</small></div><div><span>咨询后开户完成率</span><strong>58.1%</strong><small>108 ÷ 186</small></div></div><div class="step-rate-bars support-bars"><div><span>身份信息</span><i><b style="width:38.7%"></b></i><strong>4.8%</strong></div><div><span>银行卡绑定</span><i><b style="width:77.4%"></b></i><strong>9.6%</strong></div><div><span>交易密码</span><i><b style="width:57.3%"></b></i><strong>7.1%</strong></div><div class="danger"><span>人脸核验</span><i><b style="width:100%"></b></i><strong>12.4%</strong></div><div><span>开户提交</span><i><b style="width:25.8%"></b></i><strong>3.2%</strong></div></div></article>
         </section>
       </div>
 
       <div class="page-view" id="activationPage">
-        <section class="activation-grid">
-          <article class="panel activation-segment"><div class="panel-head"><div><h3>首次激活人群识别</h3></div><span class="formula-chip">有效激活率 = 激活成功用户 ÷ 识别为未实名用户</span></div><div class="activation-tree"><div class="tree-root"><span>点击首次激活</span><b>1,126 人</b></div><div class="tree-branch"><article class="valid"><span>识别为未实名</span><b>541 人 · 48.0%</b><small>进入开户</small></article><article class="invalid"><span>已实名误入</span><b>512 人 · 45.5%</b><small>不计入分母</small></article><article><span>识别失败 / 退出</span><b>73 人 · 6.5%</b><small>单独统计</small></article></div></div><div class="activation-result"><span>开户并登录成功</span><strong>386 人</strong><em>有效激活率 71.3%</em></div></article>
-          <article class="panel"><div class="panel-head"><div><h3>有效激活流程表现</h3></div><button class="quiet-btn" id="goOpeningBtn">查看开户步骤 →</button></div><div class="activation-summary"><div><span>进入开户</span><b>541</b><small>100%</small></div><div><span>交易密码成功</span><b>431</b><small>79.7%</small></div><div><span>人脸核验成功</span><b>391</b><small>72.3%</small></div><div><span>开户成功</span><b>386</b><small>71.3%</small></div><div><span>建立登录态</span><b>386</b><small>71.3%</small></div></div></article>
-        </section>
-
         <section class="panel biometric-panel">
-          <div class="panel-head"><div><h3>生物识别开通与登录</h3></div><span class="formula-chip">立即开启率 = 立即开启人数 ÷ 请求到达人数</span></div>
-          <div class="biometric-kpis"><article><span>请求到达用户</span><strong>3,842</strong><small>首次登录后成功展示请求</small></article><article><span>立即开启</span><strong>1,426</strong><small class="good-text">立即开启率 37.1%</small></article><article><span>下次再说</span><strong>1,038</strong><small>选择率 27.0%</small></article><article><span>15天不再提示</span><strong>822</strong><small>选择率 21.4%</small></article><article><span>直接取消</span><strong>556</strong><small>取消率 14.5%</small></article></div>
-          <div class="biometric-flow"><div class="bio-donut"><div><strong>37.1%</strong><span>立即开启率<br>10/22–10/28</span></div></div><div class="bio-legend"><div><i class="now"></i><span>立即开启</span><b>1,426</b><em>37.1%</em></div><div><i class="later"></i><span>下次再说</span><b>1,038</b><em>27.0%</em></div><div><i class="snooze"></i><span>15天不再提示</span><b>822</b><em>21.4%</em></div><div><i class="cancel"></i><span>直接取消</span><b>556</b><em>14.5%</em></div></div></div>
-          <div class="bio-login-strip"><article><span>已开通且可用用户</span><strong>4,386</strong><small id="bioStateDate">截至10/28 24:00</small></article><article><span>生物识别登录使用率</span><strong>48.9%</strong></article><article><span>登录完成率</span><strong>95.1%</strong></article></div>
+          <div class="panel-head"><div><h3>快捷登录分析</h3><p>整体开通状态与登录验证结果</p></div><span class="formula-chip">开通率按截止日状态 · 成功率按所选周期会话</span></div>
+          <div class="biometric-kpis"><article data-scope="state"><span>整体面容开通率</span><strong>38.2%</strong><small>6,428 ÷ 16,842</small></article><article data-scope="state"><span>整体手势开通率</span><strong>53.8%</strong><small>9,057 ÷ 16,842</small></article><article data-scope="state"><span>整体双开率</span><strong>30.4%</strong><small>5,122 ÷ 16,842</small></article><article data-scope="event"><span>面容登录成功率</span><strong>91.6%</strong><small>成功会话 ÷ 发起会话</small></article><article data-scope="event"><span>手势登录成功率</span><strong>93.8%</strong><small>降级前成功会话 ÷ 发起会话</small></article></div>
+          <div class="bio-section-title"><div><h4>新用户开通情况</h4><p>分母统一为所选周期内完成首次登录的新用户</p></div><span>新用户 2,316 人</span></div>
+          <div class="new-user-biometric-kpis"><article data-scope="event"><span>新用户面容开通率</span><strong>48.0%</strong><small>1,112 ÷ 2,316</small></article><article data-scope="event"><span>新用户手势开通率</span><strong>80.0%</strong><small>1,853 ÷ 2,316</small></article><article data-scope="event"><span>新用户双开通率</span><strong>42.0%</strong><small>973 ÷ 2,316</small></article></div>
+          <div class="biometric-flow"><div class="bio-donut new-user-donut"><div><strong>42.0%</strong><span>面容＋手势<br>双开通</span></div></div><div class="bio-legend"><div><i class="now"></i><span>面容＋手势</span><b>973</b><em>42.0%</em></div><div><i class="later"></i><span>仅开通手势</span><b>880</b><em>38.0%</em></div><div><i class="snooze"></i><span>仅开通面容</span><b>139</b><em>6.0%</em></div><div><i class="cancel"></i><span>均未开通</span><b>324</b><em>14.0%</em></div></div></div>
         </section>
 
-        <section class="dashboard-grid biometric-bottom"><article class="panel"><div class="panel-head"><div><h3>不同系统立即开启率</h3><p>比较所选周期内不同系统的首次引导承接情况</p></div></div><div class="os-compare"><div><span>iOS · Face ID / Touch ID</span><i><b style="width:54.2%"></b></i><strong>54.2%</strong></div><div><span>Android · 指纹 / 面容</span><i><b style="width:44.1%"></b></i><strong>44.1%</strong></div></div></article></section>
+        <section class="dashboard-grid biometric-bottom"><article class="panel phase-note"><div class="panel-head"><div><h3>指标口径说明</h3></div></div><p>开通率反映截至所选结束日仍处于有效状态的用户覆盖；登录成功率按一次登录会话计算，同一会话内多次尝试只计一次最终结果。面容成功率需客户端提供原生验证结果事件。</p></article></section>
       </div>
 
       <footer>原型数据仅用于展示 · 指标口径以《登录与开户核心数据埋点》为准</footer>

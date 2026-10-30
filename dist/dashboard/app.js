@@ -79,25 +79,21 @@ document.querySelectorAll('.filter-bar select').forEach(s=>s.addEventListener('c
 document.querySelector('#resetBtn').addEventListener('click',()=>{document.querySelectorAll('.filter-bar select').forEach(s=>s.selectedIndex=0);document.querySelectorAll('.scenario-bar button').forEach((b,i)=>b.classList.toggle('active',i===0));applyDemoFilters(true)});
 document.querySelectorAll('.scenario-bar button').forEach(btn=>btn.addEventListener('click',()=>{
   const configs={default:['7','全部版本','全部系统'],ios:['7','8.12.0','iOS'],android:['7','8.11.2','Android'],yesterday:['1','全部版本','全部系统']},c=configs[btn.dataset.scenario];
-  document.querySelector('#rangeSelect').value=c[0];document.querySelector('#versionSelect').value=c[1];document.querySelector('#osSelect').value=c[2];document.querySelector('#pathSelect').selectedIndex=0;
+  document.querySelector('#rangeSelect').value=c[0];document.querySelector('#versionSelect').value=c[1];document.querySelector('#osSelect').value=c[2];
   document.querySelector('#userTypeSelect').selectedIndex=0;
   document.querySelectorAll('.scenario-bar button').forEach(b=>b.classList.toggle('active',b===btn));applyDemoFilters(false);
 }));
 
 function applyDemoFilters(isReset){
-  const range=document.querySelector('#rangeSelect').value,version=document.querySelector('#versionSelect').value,os=document.querySelector('#osSelect').value,userType=document.querySelector('#userTypeSelect').value,path=document.querySelector('#pathSelect').value;
+  const range=document.querySelector('#rangeSelect').value,version=document.querySelector('#versionSelect').value,os=document.querySelector('#osSelect').value,userType=document.querySelector('#userTypeSelect').value;
   const rangeScale={7:1,30:4.18,1:.15}[range],versionScale={'全部版本':1,'8.12.0':.64,'8.11.2':.28}[version],osScale={'全部系统':1,iOS:.54,Android:.46}[os];
   const rangeDelta={7:0,30:-.6,1:.4}[range],versionDelta={'全部版本':0,'8.12.0':.8,'8.11.2':-2.4}[version],osDelta={'全部系统':0,iOS:1.1,Android:-1.2}[os];
   const extraScale={'全部用户':1,'新用户':.173,'已开户用户':.603,'已注册未实名':.144}[userType];
-  const labels=[range==='7'?'最近7天':range==='30'?'最近30天':'昨日',version,os,userType,currentPage==='opening'?path:'全部路径'].filter(v=>!v.startsWith('全部'));
+  const labels=[range==='7'?'最近7天':range==='30'?'最近30天':'昨日',version,os,userType].filter(v=>!v.startsWith('全部'));
   demoState={scale:rangeScale*versionScale*osScale*extraScale,rateDelta:rangeDelta+versionDelta+osDelta,label:labels.join(' · ')||'全部用户'};
   updateComparisonPeriod(range);
   document.querySelector('.main-content').classList.add('is-loading');
   window.setTimeout(()=>{renderDemoData();document.querySelector('.main-content').classList.remove('is-loading');toast(isReset?'已恢复全部演示数据':`已切换：${demoState.label}`)},320);
-  if(path!=='全部路径'){
-    const map={'注册后开户':'register','未开户用户补开户':'supplement','首次激活开户':'activation'};activeOpeningPath=map[path];
-    document.querySelectorAll('.entry-card').forEach(x=>x.classList.toggle('active',x.dataset.openingPath===activeOpeningPath));
-  }
 }
 
 function fmtCount(n){return Math.max(1,Math.round(n*demoState.scale)).toLocaleString()}
@@ -112,11 +108,11 @@ const dateScopes={
 };
 function renderDateScopes(range){
   const d=dateScopes[range],metric=document.querySelectorAll('.metric-card')[6],openingKpi=document.querySelectorAll('#openingPage .opening-kpis article')[3],bio=document.querySelector('.bio-donut'),bioLegend=document.querySelectorAll('.bio-legend>div');
-  document.querySelectorAll('.metric-card,.mini-kpi-grid article,.biometric-kpis article').forEach(card=>{let period=card.querySelector('.metric-period');if(!period){period=document.createElement('small');period.className='metric-period';card.appendChild(period)}period.textContent=`统计：${d.event}`});
+  document.querySelectorAll('.metric-card,.mini-kpi-grid article,.biometric-kpis article,.new-user-biometric-kpis article').forEach(card=>{let period=card.querySelector('.metric-period');if(!period){period=document.createElement('small');period.className='metric-period';card.appendChild(period)}period.textContent=card.dataset.scope==='state'?`截至：${d.cutoff}`:`统计：${d.event}`});
   const sameDayRate=Math.max(0,Math.min(100,35.1+demoState.rateDelta)),sameDayDenominator=Math.max(1,Math.round(2316*demoState.scale)),sameDayNumerator=Math.round(sameDayDenominator*sameDayRate/100);
   metric.querySelector('.metric-value').textContent=`${sameDayRate.toFixed(1)}%`;metric.querySelector('.change').className='change up';metric.querySelector('.change').textContent='↑ +1.3%';metric.querySelector('.metric-foot small').textContent='较上一周期';openingKpi.querySelector('strong').textContent=`${sameDayRate.toFixed(1)}%`;openingKpi.querySelector('small:not(.metric-period)').textContent=`${sameDayNumerator.toLocaleString()} ÷ ${sameDayDenominator.toLocaleString()}`;
-  document.querySelector('#userStructureSubtitle').textContent=`按账户识别结果划分 · 截至${d.cutoff}`;document.querySelector('#bioStateDate').textContent=`截至${d.cutoff}`;
-  bio.classList.remove('observing');bio.querySelector('strong').textContent='37.1%';bio.querySelector('span').innerHTML=`立即开启率<br>${d.event}`;[1426,1038,822,556].forEach((v,i)=>bioLegend[i].querySelector('b').textContent=fmtCount(v));[37.1,27.0,21.4,14.5].forEach((v,i)=>bioLegend[i].querySelector('em').textContent=`${v.toFixed(1)}%`);
+  document.querySelector('#userStructureSubtitle').textContent=`按账户识别结果划分 · 截至${d.cutoff}`;
+  bio.classList.remove('observing');bio.querySelector('strong').textContent='42.0%';bio.querySelector('span').innerHTML='面容＋手势<br>双开通';[973,880,139,324].forEach((v,i)=>bioLegend[i].querySelector('b').textContent=fmtCount(v));[42.0,38.0,6.0,14.0].forEach((v,i)=>bioLegend[i].querySelector('em').textContent=`${v.toFixed(1)}%`);
 }
 function renderDemoData(){
   document.querySelector('#activeFilterText').textContent=demoState.label;
@@ -126,15 +122,14 @@ function renderDemoData(){
   document.querySelectorAll('.structure-row small').forEach((el,i)=>el.textContent=`${fmtCount(structures[i].value)} 人`);
   const pathRows=document.querySelectorAll('#pathChart .path-row');paths.forEach((p,i)=>{pathRows[i].querySelector('.path-stat b').textContent=`${fmtCount(p.count)} 人`;pathRows[i].querySelector('.path-stat span').textContent=`完成率 ${fmtRate(p.rate)}`});
   const miniBase=[18642,17506,16842,2316];document.querySelectorAll('#loginPage .mini-kpi-grid strong').forEach((el,i)=>el.textContent=fmtCount(miniBase[i]));
-  const methodBase=[7500,6100,1760,2146];document.querySelectorAll('.method-row>strong').forEach((el,i)=>el.textContent=fmtCount(methodBase[i]));
+  const methodBase=[7500,6100,1760,1450,696];document.querySelectorAll('.method-row>strong').forEach((el,i)=>el.textContent=fmtCount(methodBase[i]));
   const registerBase=[3016,2684,2401,2316];document.querySelectorAll('.registration-funnel>div').forEach((el,i)=>{el.querySelector('b').textContent=fmtCount(registerBase[i]);const prev=i?registerBase[i-1]:registerBase[i],step=registerBase[i]/prev*100,retain=registerBase[i]/registerBase[0]*100,loss=i?prev-registerBase[i]:0;el.querySelector('small').textContent=`上步 ${step.toFixed(1)}% · 起点 ${retain.toFixed(1)}%${i?` · 流失 ${fmtCount(loss)}`:''}`});
   [1084,1012,220].forEach((v,i)=>document.querySelectorAll('.source-bars small')[i].textContent=`${fmtCount(v)} 人`);
   const openingBase=[2439,1481];const openingStrong=document.querySelectorAll('#openingPage .opening-kpis strong');openingStrong[0].textContent=fmtCount(openingBase[0]);openingStrong[1].textContent=fmtCount(openingBase[1]);openingStrong[2].textContent=fmtRate(60.7);openingStrong[3].textContent=fmtRate(35.1);openingStrong[4].textContent=fmtRate(86.4);
   const entryBase=[[1101,674,61.2],[797,421,52.8],[541,386,71.3]];document.querySelectorAll('.entry-card').forEach((c,i)=>{c.querySelector('strong').textContent=`${fmtCount(entryBase[i][0])} 人`;c.querySelector('em').textContent=fmtRate(entryBase[i][2]);c.querySelector('small').textContent=`有效开户 ${fmtCount(entryBase[i][1])} 人`});
-  const bioCounts=[3842,1426,1038,822,556];document.querySelectorAll('.biometric-kpis strong').forEach((el,i)=>el.textContent=fmtCount(bioCounts[i]));
-  const bioStrip=document.querySelectorAll('.bio-login-strip strong');bioStrip[0].textContent=fmtCount(4386);[48.9,95.1].forEach((v,i)=>bioStrip[i+1].textContent=fmtRate(v));
-  const activationCounts=[1126,541,512,73,386];const activationTargets=[document.querySelector('.tree-root b'),...document.querySelectorAll('.tree-branch b'),document.querySelector('.activation-result strong')];activationTargets.forEach((el,i)=>{if(el)el.textContent=i===0?`${fmtCount(activationCounts[i])} 人`:i===4?`${fmtCount(activationCounts[i])} 人`:el.textContent.replace(/[\d,]+/,fmtCount(activationCounts[i]))});
-  [541,431,391,386,386].forEach((v,i)=>document.querySelectorAll('.activation-summary b')[i].textContent=fmtCount(v));
+  const quickLoginValues=[fmtRate(38.2),fmtRate(53.8),fmtRate(30.4),fmtRate(91.6),fmtRate(93.8)];document.querySelectorAll('.biometric-kpis strong').forEach((el,i)=>el.textContent=quickLoginValues[i]);
+  const newUserBioValues=[fmtRate(48.0),fmtRate(80.0),fmtRate(42.0)];document.querySelectorAll('.new-user-biometric-kpis strong').forEach((el,i)=>el.textContent=newUserBioValues[i]);
+  const supportSummary=document.querySelectorAll('.support-summary strong');supportSummary[0].textContent=fmtCount(186);supportSummary[1].textContent=fmtRate(7.6);supportSummary[2].textContent=fmtRate(58.1);const supportRates=[4.8,9.6,7.1,12.4,3.2];document.querySelectorAll('.support-bars>div').forEach((row,i)=>{const rate=Math.max(0,supportRates[i]+demoState.rateDelta);row.querySelector('strong').textContent=`${rate.toFixed(1)}%`;row.querySelector('i b').style.width=`${Math.min(100,rate/12.4*100)}%`});
   const sourceBases=[312,178,142,98,67],sourceSuccess=[174,94,72,47,34],sourceRates=[55.8,52.8,50.7,48,50.7];document.querySelectorAll('.source-entry').forEach((el,i)=>{el.querySelector('strong').textContent=fmtCount(sourceBases[i]);el.querySelector('em').textContent=`完成率 ${fmtRate(sourceRates[i])}`;el.querySelector('small').textContent=`开户贡献 ${(sourceSuccess[i]/421*100).toFixed(1)}%`;el.querySelector('i b').style.width=fmtRate(sourceRates[i])});
   document.querySelector('.supplement-entry-panel .formula-chip').textContent=`合计进入 ${fmtCount(797)} 人 · 有效开户 ${fmtCount(421)} 人`;
   renderTrend();renderLoginFunnel();renderDiagnosis(currentDiagnosis);renderOpeningFunnel(activeOpeningPath);renderReasonPanels();renderDateScopes(document.querySelector('#rangeSelect').value);
@@ -167,7 +162,8 @@ const diagnosis={
   sms:{title:'短信登录漏斗',sub:'验证码获取、提交与最终登录',status:'完成率 96.9%',steps:[['请求验证码',7500],['短信发送成功',7410],['提交验证码',7370],['登录完成',7268]]},
   one:{title:'一键登录漏斗',sub:'本机号码授权与最终登录',status:'完成率 97.9%',steps:[['发起一键登录',6100],['提交本机授权',6051],['登录完成',5972]]},
   password:{title:'账户密码登录漏斗',sub:'密码提交与最终登录',status:'完成率 88.7%',steps:[['进入密码登录',1760],['提交账户密码',1723],['登录完成',1561]]},
-  biometric:{title:'生物识别登录漏斗',sub:'发起验证与最终登录',status:'完成率 95.1%',steps:[['发起生物识别',2146],['登录态建立',2041]]}
+  face:{title:'面容／指纹登录漏斗',sub:'发起系统验证与最终登录',status:'完成率 91.6%',steps:[['发起面容／指纹验证',1450],['登录态建立',1328]]},
+  gesture:{title:'手势密码登录漏斗',sub:'绘制手势与最终登录',status:'完成率 93.8%',steps:[['发起手势验证',696],['登录态建立',653]]}
 };
 function renderDiagnosis(type){currentDiagnosis=type;const d=diagnosis[type],start=d.steps[0][1];document.querySelector('#diagnosisTitle').textContent=d.title;document.querySelector('#diagnosisSub').textContent=d.sub;document.querySelector('#diagnosisStatus').textContent=`完成率 ${fmtRate(d.steps.at(-1)[1]/start*100)}`;document.querySelector('#diagnosisFunnel').innerHTML=d.steps.map((x,i)=>{const prev=i?d.steps[i-1][1]:x[1],step=x[1]/prev*100,retain=x[1]/start*100,loss=i?prev-x[1]:0;return `<div class="compact-row"><span>${x[0]}</span><i><b style="width:${Math.min(100,retain+demoState.rateDelta)}%"></b></i><strong>${fmtCount(x[1])}<small>上步 ${step.toFixed(1)}% · 起点 ${retain.toFixed(1)}%${i?` · 流失 ${fmtCount(loss)}`:''}</small></strong></div>`}).join('')}
 renderDiagnosis('sms');
@@ -189,7 +185,6 @@ function renderOpeningFunnel(type){
 }
 renderOpeningFunnel('register');
 document.querySelectorAll('.entry-card').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.entry-card').forEach(x=>x.classList.remove('active'));c.classList.add('active');renderOpeningFunnel(c.dataset.openingPath)}));
-document.querySelector('#goOpeningBtn').addEventListener('click',()=>{switchPage('opening');document.querySelectorAll('.entry-card').forEach(x=>x.classList.toggle('active',x.dataset.openingPath==='activation'));renderOpeningFunnel('activation')});
 
 const supplementSourceData={unverified_home:{name:'未实名首页',count:312,success:174,rate:55.8},asset:{name:'资产页',count:178,success:94,rate:52.8},buy:{name:'买入拦截',count:142,success:72,rate:50.7},invest:{name:'定投拦截',count:98,success:47,rate:48.0},password:{name:'密码登录拦截',count:67,success:34,rate:50.7}};
 function renderSupplementSource(key){
@@ -206,21 +201,18 @@ document.querySelectorAll('.source-entry').forEach(x=>x.addEventListener('click'
 const openingReasonData={
   all:[['人脸核验未通过',36.8,'光线、动作及公安库比对失败'],['银行卡校验失败',24.3,'卡状态、预留手机号或渠道异常'],['身份信息校验失败',18.6,'证件信息或有效期异常'],['用户主动退出',12.7,'按最后到达步骤记录'],['其他',7.6,'网络或系统服务异常']],ios:[['人脸核验未通过',34.1,'Face ID或公安库比对失败'],['银行卡校验失败',25.8,'卡状态或预留手机号异常'],['身份信息校验失败',19.5,'证件信息异常'],['用户主动退出',13.0,'按最后到达步骤记录'],['其他',7.6,'网络或系统服务异常']],android:[['人脸核验未通过',40.9,'设备兼容、光线或动作失败'],['银行卡校验失败',22.1,'卡状态或预留手机号异常'],['身份信息校验失败',17.4,'证件信息异常'],['用户主动退出',12.4,'按最后到达步骤记录'],['其他',7.2,'网络或系统服务异常']],old:[['人脸核验未通过',43.6,'旧版本设备兼容或动作失败'],['银行卡校验失败',20.4,'卡状态或渠道异常'],['身份信息校验失败',16.8,'证件信息异常'],['用户主动退出',11.7,'按最后到达步骤记录'],['其他',7.5,'网络或系统服务异常']],buy:[['人脸核验未通过',38.2,'光线、动作及公安库比对失败'],['用户主动退出',23.4,'交易被开户流程打断'],['银行卡校验失败',20.1,'卡状态或预留手机号异常'],['身份信息校验失败',12.7,'证件信息异常'],['其他',5.6,'网络或系统服务异常']],asset:[['人脸核验未通过',35.0,'光线、动作及公安库比对失败'],['银行卡校验失败',26.6,'卡状态或预留手机号异常'],['身份信息校验失败',20.2,'证件信息异常'],['用户主动退出',11.0,'按最后到达步骤记录'],['其他',7.2,'网络或系统服务异常']]
 };
-function renderReasonPanels(){const opening=openingReasonData[document.querySelector('#openingReasonDimension').value];document.querySelector('#openingFailureList').innerHTML=opening.map(x=>`<div><b>${x[0]}</b><span>${x[1].toFixed(1)}%</span><small>${x[2]}</small></div>`).join('')}
+function renderReasonPanels(){const selector=document.querySelector('#openingReasonDimension'),list=document.querySelector('#openingFailureList');if(!selector||!list)return;const opening=openingReasonData[selector.value];list.innerHTML=opening.map(x=>`<div><b>${x[0]}</b><span>${x[1].toFixed(1)}%</span><small>${x[2]}</small></div>`).join('')}
 document.querySelectorAll('.reason-select').forEach(x=>x.addEventListener('change',renderReasonPanels));renderReasonPanels();
 
 // 业务归属同步：生物识别并入登录，首次激活并入开户，不保留独立一级页面。
 const legacyPage=document.querySelector('#activationPage');
-const activationGrid=legacyPage.querySelector('.activation-grid');
 const biometricPanel=legacyPage.querySelector('.biometric-panel');
 const biometricBottom=legacyPage.querySelector('.biometric-bottom');
 const openingBottom=document.querySelector('#openingPage .opening-bottom-grid');
 document.querySelector('.path-entry-panel').after(document.querySelector('.supplement-entry-panel'));
-document.querySelector('#openingPage').insertBefore(activationGrid,openingBottom.nextSibling);
-activationGrid.insertAdjacentHTML('beforebegin','<div class="embedded-heading"><h2>首次激活</h2></div>');
 const loginPage=document.querySelector('#loginPage');
 loginPage.appendChild(biometricPanel);
-biometricPanel.insertAdjacentHTML('beforebegin','<div class="embedded-heading"><h2>生物识别登录</h2></div>');
+biometricPanel.insertAdjacentHTML('beforebegin','<div class="embedded-heading"><h2>快捷登录</h2><p>面容／指纹、手势密码及重置结果</p></div>');
 loginPage.appendChild(biometricBottom);
 legacyPage.remove();
 renderDateScopes(document.querySelector('#rangeSelect').value);
